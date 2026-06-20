@@ -1,0 +1,4 @@
+﻿interface:
+  display_name: "Pinterest Image Selection"
+  short_description: "Chrome Pinterest search and reversible image selection"
+  default_prompt: "Use $pinterest-interior-design-skill to search Pinterest in Chrome, save a dated candidate project, and select the strongest images."
