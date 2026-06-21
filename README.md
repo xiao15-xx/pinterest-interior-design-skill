@@ -1,8 +1,64 @@
 # pinterest-interior-design-skill
+
 A Pinterest interior-design reference finder for curated candidates, source tracking, and final image selection.
+# Overview
+pinterest-interior-design-skill is a Codex Skill dedicated to collecting high-quality interior design visual references from Pinterest, leveraging your existing logged-in Chrome session.
+Core Design Target
+It delivers bounded, visible search results to output a small refined image library with consistent candidate quantity, complete original source metadata, contact-sheet preview support, and reversible final image pick operations.
+# Perfect use cases:
+Interior mood boards
+Design proposal materials
+Space style reference collection
+Material inspiration gathering
+High-end visual direction sorting
+# Default Standard Workflow
+Parse your design brief
+Generate compact bilingual (Chinese + English) search query plan
+Execute one targeted Pinterest search via Chrome
+Extract & retain 8–16 visible candidate images
+Store original raw image files + full source metadata
+Rank images by visual matching quality
+Save top-rated final selected pictures
+# Usage Example in Codex
+Invoke this skill via the token $pinterest-interior-design-skill
+# Sample instruction:
+plaintext
+Use $pinterest-interior-design-skill to find modern oriental luxury living room references and save 2 final images.
+# Built-in Restrict# ns & User-Friendly Logic
+This skill strictly avoids low-quality scraping behaviors:
+No infinite page scrolling
+No mass bulk image scraping
+No fake / invented original source URLs
+No quality-compressing shortcuts
+# Special handling rules:
+If Pinterest login is required: Pause workflow and return control to you to finish authentication manually
+If search results are scarce: Only preserve qualified high-quality images, will not fill quota with low-standard pictures
 
-pinterest-interior-design-skill` is a Codex Skill for collecting interior-design visual references from Pinterest through the user's existing Chrome session. It is designed for bounded, visible searches that produce a small curated image set with stable candidate numbers, original source metadata, a contact-sheet preview, and reversible final selections. It works well for interior mood boards, design proposals, space-style references, material inspiration, and high-quality visual direction. The default workflow parses the brief, builds a compact bilingual query plan, runs one focused Pinterest search, keeps 8-16 visible candidates, preserves the original image bytes, records source information, ranks the images, and saves the strongest final selections. In Codex, call it with `$pinterest-interior-design-skill`, for example: "Use `$pinterest-interior-design-skill` to find modern oriental luxury living room references and save 2 final images." The skill avoids infinite scrolling, bulk scraping, invented original URLs, and quality-lowering shortcuts; when login is required, it hands control back to the user, and when results are limited, it saves only the suitable images.
-
-Pinterest 室内设计灵感搜图与精选工具，支持候选图、来源记录和最终选图管理。
-
-`pinterest-interior-design-skill` 是一个面向室内设计灵感搜集的 Codex Skill，用于在用户已登录的 Chrome / Pinterest 会话中进行有边界的可见搜索，收集少量高质量候选图，并生成可复查、可替换、可追溯来源的图片项目。它适合用于室内设计参考图、风格板、方案提案素材、空间氛围图和设计灵感筛选。默认流程会解析你的需求，生成中英文搜索词，控制 Chrome 执行一次聚焦搜索，在当前可见结果中筛选 8-16 张候选图，保留原始图片文件、来源信息、候选编号、联系表预览图和最终精选图。使用时可以直接在 Codex 中调用 `$pinterest-interior-design-skill`，例如让它搜索“现代东方轻奢客厅实景参考图，保留 2 张最终图片”。这个 Skill 不会无限滚动、不批量抓取、不伪造原图地址；如果 Pinterest 需要登录，它会停留在登录页面等待用户处理；如果图片质量不足，它会保留合格结果而不是降低标准凑数量。
+# 中文说明
+pinterest-interior-design-skill
+Pinterest 室内设计灵感搜图与精选工具，支持候选图管理、来源溯源、最终选图操作
+# 功能简介
+pinterest-interior-design-skill 是面向室内设计灵感搜集的 Codex 工具，依托已登录的 Chrome / Pinterest 会话执行可控可视化搜图，批量产出少量精修候选图集，完整留存图片来源元数据，支持预览图排版、可撤回式最终选图。
+# 适用场景
+室内氛围板、设计提案素材、空间风格参考、材质灵感、高端视觉方案筛选
+# 默认执行流程
+解析用户设计需求
+生成精简中英双语搜索关键词方案
+驱动 Chrome 执行单次精准定向搜图
+截取当前可视范围内 8–16 张候选效果图
+完整保存原图文件、来源链接、素材编号
+按匹配度对图片自动排序分级
+留存综合最优的精选定稿图
+# Codex 调用示例
+直接使用标识 $pinterest-interior-design-skill 调用工具
+# 示例指令：
+使用 $pinterest-interior-design-skill 搜索现代东方轻奢客厅实景参考图，保留 2 张最终精选图片
+# 安全与质量约束
+工具规避粗暴爬虫行为：
+不会无限下滑加载页面
+不批量无差别抓取全部图片
+不伪造、篡改原图来源地址
+不使用压缩画质等降质捷径
+# 特殊场景处理：
+若 Pinterest 触发登录校验：暂停流程，交还操作权限给用户手动完成登录
+若检索素材数量不足：仅留存达标优质图，不会放宽标准凑齐数量
