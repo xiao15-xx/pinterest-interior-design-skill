@@ -1,0 +1,25 @@
+# Recovery States
+
+Read only after a search or large-image failure.
+
+Use one of: `PAGE_LOADING`, `LOGIN_REQUIRED`, `CAPTCHA`, `PINTEREST_ERROR`, `DOM_CHANGED`, `DOM_READ_TIMEOUT`, `INCOGNITO_CONTROL_UNAVAILABLE`, `NO_RESULTS`, `LOW_PREVIEW_COUNT`, `ASPECT_GATE_LOW`, `LANDSCAPE_COVERAGE_LOW`, `LARGE_LINK_MISSING`, `DOWNLOAD_FAILED`.
+
+`INCOGNITO_CONTROL_UNAVAILABLE` means an incognito Chrome window was requested or attempted, but the Chrome extension did not expose the incognito tab through `openTabs()` or the tab could not be claimed. This usually means the extension is not allowed in incognito mode. It is not a search result failure. Record the attempted URL, Chrome path when known, page mode `incognito`, timestamp, and whether the task fell back to normal mode or stopped. Do not claim a normal or unrelated tab and label it incognito.
+
+If the incognito window was just launched and the first lightweight browser call reports that the browser is unavailable, do not immediately record `INCOGNITO_CONTROL_UNAVAILABLE`. Wait briefly, reacquire the extension browser once, and repeat only `openTabs()`. Record `INCOGNITO_CONTROL_UNAVAILABLE` only if the Pinterest incognito search tab is still not visible or claimable after that retry.
+
+`DOM_READ_TIMEOUT` means Pinterest is visible or believed loaded, but the status probe, bounded card read, DOM evaluation, or other search-page read timed out before verified Pin-card data could be extracted. It is not `NO_RESULTS` and not `LOW_PREVIEW_COUNT`. Search-page `pageAssets` timeouts must not be retried as a recovery path; switch to the next query instead. For a Round-1 timeout with no verified data, first reconnect or refresh once and retry the same query with the lightest card read. If that still fails, record `DOM_READ_TIMEOUT` and continue to the next automated discovery round with a changed query or seed. Never ask for manual Pin URLs and never build from screenshots.
+
+After each successful read round, update the cumulative unique preview pool after deduplication, decoding, and relevance filtering. A cumulative pool below 10 creates `LOW_PREVIEW_COUNT` with `CauseCodes`, round, method, query or seed Pin, raw count, valid count, cumulative valid count, eligible visual count, rejection summary, page status, and timestamp.
+
+If the cumulative pool has at least 10 valid previews but cannot satisfy the 40% board landscape requirement, record `ASPECT_GATE_LOW` or `LANDSCAPE_COVERAGE_LOW`. The next round must correct the issue by changing the query or similar-image seed. Controlled `landscape` or `horizontal` wording is allowed only in this correction path; aspect-ratio numbers, pixel sizes, and resolution terms remain forbidden.
+
+The next round after `LOW_PREVIEW_COUNT`, `ASPECT_GATE_LOW`, `LANDSCAPE_COVERAGE_LOW`, or `DOM_READ_TIMEOUT` must set `AddressesRound` to the failed round, change the prior query or similar-image seed, provide a non-empty `AdjustmentSummary`, and use at least one allowed `CorrectionActions` value: `broaden-query`, `change-language`, `use-similar-seed`, `replace-similar-seed`, `strengthen-room-type`, `strengthen-quality-terms`, `strengthen-aspect-coverage`, or `recover-page-state`. A successful next round sets `ResolvedByRound` when the cumulative pool reaches at least 10 previews and 40% landscape coverage; a fourth-round issue remains unresolved. Keep every issue even if the merged board later passes.
+
+Page failures get one short wait and one state check. If a browser call resets the automation session, count that as the short recovery check for the round and continue with a changed query after reconnecting. If both page-wide `evaluate` and locator count have reset the session in the same task, ban both for the remaining discovery rounds and use only navigation, title/url, screenshot orientation checks, and one bounded card-read attempt; if no verified Pin URL and image URL pair is produced, stop before `Build`. Do not repeat completed rounds and do not run infinite scroll. Four failed discovery rounds stop before `Build`.
+
+In verified incognito mode, a search-page card-read timeout can leave the visible tab listed in `openTabs()` but no longer claimable. Treat that as the same round's `DOM_READ_TIMEOUT`, not as zero results. Do not reclaim the timed-out tab. The next round must open a fresh incognito search URL, verify it with `openTabs()`, and run only the bounded first-screen card read.
+
+When `INCOGNITO_CONTROL_UNAVAILABLE` is followed by repeated normal-tab `DOM_READ_TIMEOUT`, report the three available solutions in the task summary: enable extension incognito permission, retry normal controlled tab after browser restart, or provide user-confirmed Pin URLs. Only the third option is allowed to involve user-supplied Pin URLs, and it must be labeled as a rescue path.
+
+When a selected Pin lacks a non-preview resource, automatically attempt one similar-image recovery for that slot. Record `replacementOf`, preserve the failed source, and do not use a preview as the final image. If replacement also fails, report the missing final count.

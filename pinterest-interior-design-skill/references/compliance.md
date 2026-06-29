@@ -1,30 +1,12 @@
-# Pinterest Compliance Notes
+# Pinterest Compliance
 
-Read this reference before automating Pinterest collection, downloading, or API access.
+Read before Pinterest collection or download.
 
-## Allowed Direction
-
-- Generate focused Pinterest search URLs and visual query strategies.
-- Use the user's visible, authenticated Chrome session when requested.
-- Collect a small, bounded set of relevant page-provided assets for the user's design-reference task.
-- Preserve visible Pin and image source URLs, asset IDs, and attribution when available.
-- Use official Pinterest APIs only with user-provided authorization and currently documented scopes.
-
-## Limits
-
-- Collect at most 16 visible candidates per project.
-- Use one focused search and at most one meaningful refinement.
-- Do not automate infinite scrolling, scrape page internals, enumerate accounts or boards, or mass-download images.
-- Do not bypass login, CAPTCHA, rate limits, robots controls, paywalls, or access restrictions.
-- Do not remove watermarks or imply that reference images are owned or licensed assets.
-- Do not fabricate creator, Pin, or source information when it is not visible.
-
-## Output Use
-
-Treat saved images as visual references unless the user establishes appropriate reuse rights. Keep `manifest.json` and `candidates.csv` with the project so sources and selection history remain traceable.
-
-## Official Sources To Recheck For API Work
-
-- https://developers.pinterest.com/
-- https://policy.pinterest.com/en/developer-guidelines
-- https://policy.pinterest.com/en/terms-of-service
+- Use Pinterest only. Default to the user's visible authenticated Chrome session. When the user explicitly requests incognito, use an isolated incognito Chrome window only if the Chrome extension can control that exact task tab; stop for login, CAPTCHA, or missing extension access instead of bypassing authentication.
+- Retain at most 16 primary candidates; do not infinite-scroll, enumerate accounts or boards, scrape hidden internals, or mass-download.
+- Do not bypass login, CAPTCHA, rate limits, robots controls, paywalls, or permissions.
+- Collect only page-visible Pin links, visible metadata, and page-provided media needed for the user's reference task.
+- If automated browser control fails, user-confirmed Pin URLs are allowed only as a bounded rescue path; do not accept screenshots, copied image pixels, non-Pinterest URLs, hidden page state, or guessed media URLs as sources.
+- Similar-image recovery is bounded to one attempt per failed final slot.
+- Treat images as traceable design references, not owned or licensed assets. Keep source metadata and watermarks intact.
+- Never expose cookies, tokens, local storage, credentials, or unrelated personal data.
